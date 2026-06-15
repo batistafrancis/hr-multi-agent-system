@@ -24,7 +24,13 @@ class RAGRetriever:
 
     def _get_embedding_function(self):
         """Return appropriate embedding model based on settings."""
-        if "sentence-transformers" in settings.embedding_model:
+        if settings.use_ollama_embeddings:
+            from langchain_ollama import OllamaEmbeddings
+            return OllamaEmbeddings(
+                model=settings.ollama_model,
+                base_url=settings.ollama_base_url
+            )
+        elif "sentence-transformers" in settings.embedding_model:
             # If use explicitly wants local sentence-transformers (free, no API key)
             try:
                 from langchain_huggingface import HuggingFaceEmbeddings

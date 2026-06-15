@@ -18,9 +18,11 @@ RUN pip install --no-cache-dir --upgrade pip setuptools wheel && \
     pip install --no-cache-dir \
     langchain \
     langchain-community \
+    langchain-ollama \
     langchain-openai \
     langchain-chroma \
     langgraph \
+    tavily-python \
     chromadb \
     sentence-transformers \
     pydantic \

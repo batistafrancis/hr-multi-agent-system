@@ -31,8 +31,13 @@ class Settings(BaseSettings):
     # Vector DB
     chrome_persist_dir: str = "./data/benefits_db"
 
+    # Ollama (local)
+    ollama_base_url: str = "http://localhost:11434" # default
+    ollama_model: str = "llama3.2:3b" # or "mistral", "phi3", etc
+
     # Model names
-    embedding_model: str = "sentence-transformers/all-MiniLM-L6-V2"
+    embedding_model: str = "sentence-transformers/all-MiniLM-L6-V2" # or use Ollama embeddings
+    use_ollama_embeddings: bool = False # set True to use Ollama for embeddings
     llm_model: str = "gpt-4o-mini" # Start cheap, upgrade to gpt-4o later
 
     # Application

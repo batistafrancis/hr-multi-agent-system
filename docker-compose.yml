@@ -1,11 +1,31 @@
 services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    volumes:
+      - ollama_data:/root/.ollama
+    ports:
+      - "11434:11434"
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    command: serve
   hr-agent:
     build: .
     container_name: hr-multi-agent
+    depends_on:
+      ollama:
+        condition: service_healthy
     environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - OLLAMA_MODEL=${OLLAMA_MODEL:-llama3.2:3b}
+      - USE_OLLAMA_EMBEDDINGS=${USE_OLLAMA_EMBEDDINGS:-false}
       - OPENAI_API_KEY=${OPENAI_API_KEY:-dummy_key_not_needed_for_local}
       - EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-v2
       - CHROMA_PERSIST_DIR=/app/data/benefits_db
+      - TAVILY_API_KEY=${TAVILY_API_KEY:-}
       - ENVIRONMENT=development
       - LOG_LEVEL=INFO
     volumes:
@@ -15,8 +35,16 @@ services:
     ports:
       - "8000:8000"
     command: >
-      sh -c "python scripts/seed_rag.py &&
-             python -m uvicorn src.api.main:app --host 0.0.0.0 --port 8000"
+      sh -c "
+        echo 'Waiting for Ollama to be ready...' &&
+        sleep 5 &&
+        echo 'Pulling ${OLLAMA_MODEL:-llama3.2:3b} model...' &&
+        curl -X POST http://ollama:11434/api/pull -d '{\"name\": \"${OLLAMA_MODEL:-llama3.2:3b}\"}' &&
+        echo 'Model pull complete. Starting RAG seeding...' &&
+        python scripts/seed_rag.py &&
+        echo 'Starting API server...' &&
+        python -m uvicorn src.api.main:app --host 0.0.0.0 --port 8000
+      "
 
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
@@ -39,3 +67,4 @@ services:
 
 volumes:
   prometheus_data:
+  ollama_data:
