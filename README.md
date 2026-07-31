@@ -62,9 +62,29 @@ curl -X POST "http://localhost:8000/generate-role?topic=AI%20Ethics%20Manager"
 Response includes final report and role description.
 
 
-## Comming Next
+## Phrase 3: Evaluation & Observability (Current)
 
-Phase 3 will add evaluation metrics and observability (Prometheus)
+- ✅ Evaluation harness (consistency, benefit relevance, completeness)
+- ✅ Prometheus metris endpoint (`/metrics`)
+- ✅ Request ID tracing and structured logging
+- ✅ Unit and integration tests
+
+
+## Metrics
+
+Prometheus metrics are available at `http://localhost:8000/metrics`:
+
+- `http_request_total` - request count by method/endpoint/status
+- `http_request_duration_seconds` - latency histogram
+- `agent_calls_total` - agent invocations
+- `rag_queries_total` - RAG retrieval queries
+
+
+## Running Tests
+
+```bash
+pytest tests/ -v
+```
 
 
 ## License

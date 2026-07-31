@@ -13,25 +13,12 @@ RUN apt-get update && apt-get install -y \
 COPY pyproject.toml ./
 COPY .env.example .env
 
+# Copy project definition
+COPY pyproject.toml .
+
 # Install Python dependencies
 RUN pip install --no-cache-dir --upgrade pip setuptools wheel && \
-    pip install --no-cache-dir \
-    langchain \
-    langchain-community \
-    langchain-ollama \
-    langchain-openai \
-    langchain-chroma \
-    langgraph \
-    tavily-python \
-    chromadb \
-    sentence-transformers \
-    pydantic \
-    pydantic-settings \
-    python-dotenv \
-    structlog \
-    fastapi \
-    uvicorn \
-    httpx && \
+    pip install -e . && \
     pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu
 
 # Copy the rest of the application
