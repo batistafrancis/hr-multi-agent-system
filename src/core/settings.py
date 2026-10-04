@@ -11,7 +11,7 @@ class Settings(BaseSettings):
         env_file=".env",
         env_file_encoding="utf-8",
         case_sensitive=False,
-        extra="ignore" # -- ignore extra env vars (like langchain_tracing_v2)
+        extra="ignore",  # -- ignore extra env vars (like langchain_tracing_v2)
     )
 
     # OpenAI
@@ -32,17 +32,17 @@ class Settings(BaseSettings):
     chrome_persist_dir: str = "./data/benefits_db"
 
     # Ollama (local)
-    ollama_base_url: str = "http://localhost:11434" # default
-    ollama_model: str = "llama3.2:3b" # or "mistral", "phi3", etc
+    ollama_base_url: str = "http://localhost:11434"  # default
+    ollama_model: str = "llama3.2:3b"  # or "mistral", "phi3", etc
 
     # Model names
-    embedding_model: str = "sentence-transformers/all-MiniLM-L6-V2" # or use Ollama embeddings
-    use_ollama_embeddings: bool = False # set True to use Ollama for embeddings
-    llm_model: str = "gpt-4o-mini" # Start cheap, upgrade to gpt-4o later
+    embedding_model: str = "sentence-transformers/all-MiniLM-L6-V2"  # or use Ollama embeddings
+    use_ollama_embeddings: bool = False  # set True to use Ollama for embeddings
+    llm_model: str = "gpt-4o-mini"  # Start cheap, upgrade to gpt-4o later
 
     # Application
-    environment: str = "development" # development, staging, production
+    environment: str = "development"  # development, staging, production
     log_level: str = "INFO"
 
 
-settings = Settings() # Singleton instance
+settings = Settings()  # Singleton instance

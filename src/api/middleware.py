@@ -4,7 +4,6 @@ import time
 import uuid
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
-from starlette.responses import Response
 from src.observability.metrics import REQUEST_COUNT, REQUEST_LATENCY, ACTIVE_REQUESTS
 from src.utils.logging_conf import get_logger
 
@@ -31,7 +30,7 @@ class MetricsMiddleware(BaseHTTPMiddleware):
         try:
             response = await call_next(request)
             status = response.status_code
-        except Exception as e:
+        except Exception:
             status = 500
             raise
         finally:
@@ -52,18 +51,14 @@ class LoggingMiddleware(BaseHTTPMiddleware):
                 "request_id": request_id,
                 "method": request.method,
                 "path": request.url.path,
-                "client_ip": request.client.host if request.client else None
-            }
+                "client_ip": request.client.host if request.client else None,
+            },
         )
         start = time.time()
         response = await call_next(request)
         duration = time.time() - start
         logger.info(
             "Request completed",
-            extra={
-                "request_id": request_id,
-                "status": response.status_code,
-                "duration": duration
-            }
+            extra={"request_id": request_id, "status": response.status_code, "duration": duration},
         )
         return response
