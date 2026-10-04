@@ -1,9 +1,9 @@
 # HR Multi-Agent System
 
-Production-ready multi-agent system for HR innovation:  
+Multi-agent system for HR innovation, progressing toward production readiness:
 Market research, role design, benefits analysis, and reporting.
 
-Author: [Francis Batista](https://github.com/francisrod01)
+Author: [Francis Batista](https://github.com/batistafrancis)
 
 
 ## Phase 1: Foundation & RAG
@@ -15,6 +15,16 @@ Author: [Francis Batista](https://github.com/francisrod01)
 
 
 ## Quick Start
+
+### Recommended: VS Code Dev Container
+
+Start Docker Desktop (Linux containers), install the VS Code Dev Containers extension,
+then run **Dev Containers: Reopen in Container**. The configuration in
+[.devcontainer](.devcontainer/devcontainer.json) supplies Python 3.11, development
+dependencies, and an Ollama sidecar; host Python is not required.
+
+See the [development and release guide](docs/releasing.md) for validation commands,
+model setup, API startup, and image publishing.
 
 ### 1. Setup Environment
 
@@ -31,7 +41,7 @@ pip install -e .
 from src.tools.rag_retriever import RAGRetriever
 
 retriever = RAGRetriever()
-context = retriever.retriever_context("What retirement benefits do we offer?")
+context = retriever.retrieve_context("What retirement benefits do we offer?")
 print(context)
 ```
 
@@ -43,11 +53,11 @@ print(context)
 - `scripts/` - Seeding and utility scripts
 
 
-## Phase 2: Multi-Agent Orchestration (Current)
+## Phase 2: Multi-Agent Orchestration
 
 - ✅ Researcher agent (web search)
 - ✅ Role designer agent (RAG + LLM)
-- ✅ Benefits analyst agent
+- ✅ Benefits analyst agent (static recommendations; model-backed analysis is pending)
 - ✅ Report compiler
 - ✅ LangGraph workflow
 - ✅ API endpoint `/generate-role`
@@ -62,10 +72,10 @@ curl -X POST "http://localhost:8000/generate-role?topic=AI%20Ethics%20Manager"
 Response includes final report and role description.
 
 
-## Phrase 3: Evaluation & Observability (Current)
+## Phase 3: Evaluation & Observability
 
 - ✅ Evaluation harness (consistency, benefit relevance, completeness)
-- ✅ Prometheus metris endpoint (`/metrics`)
+- ✅ Prometheus metrics endpoint (`/metrics`)
 - ✅ Request ID tracing and structured logging
 - ✅ Unit and integration tests
 
@@ -74,10 +84,31 @@ Response includes final report and role description.
 
 Prometheus metrics are available at `http://localhost:8000/metrics`:
 
-- `http_request_total` - request count by method/endpoint/status
+- `http_requests_total` - request count by method/endpoint/status
 - `http_request_duration_seconds` - latency histogram
 - `agent_calls_total` - agent invocations
 - `rag_queries_total` - RAG retrieval queries
+
+Agent/RAG counters are defined but their call-path instrumentation remains pending.
+
+## Phase 4: Production Readiness (Current)
+
+- CI validates lint, formatting, types, offline tests, and production image imports.
+- Version tags trigger gated image publication to GitHub Container Registry.
+- Cloud deployment, dashboards/alerts, caching, and demo frontend remain pending.
+- See [PROGRESS.md](PROGRESS.md) and the [release checklist](docs/releasing.md#v100-checklist).
+
+## Repository coding agent and skills
+
+Use the [HR system engineer](.github/agents/hr-system-engineer.agent.md) Copilot agent
+for project development. It is a coding assistant, not a new runtime HR agent.
+Reusable project skills:
+
+- [HR workflow development](.github/skills/hr-workflow-development/SKILL.md)
+- [HR validation](.github/skills/hr-validation/SKILL.md)
+- [HR release readiness](.github/skills/hr-release-readiness/SKILL.md)
+- [HR Git workflow](.github/skills/hr-git-workflow/SKILL.md) (50-character subjects,
+  70-character body lines)
 
 
 ## Running Tests

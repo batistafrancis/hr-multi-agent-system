@@ -13,12 +13,21 @@ The remaining work is mostly production-readiness, documentation, deployment, an
 - Prometheus metrics endpoint
 - Local Docker and docker-compose setup
 - CI workflow for lint, tests, and Docker build
+- Python 3.11 Dev Container with Ollama sidecar
+- Repository Copilot coding agent and four reusable development skills
+- Git skill enforcing 50-character subjects and 70-character body lines
+- Offline provider doubles for unit and graph integration tests
+- Tag-triggered, validation-gated GHCR image publishing configuration
 
 ## Partial
 
 - Monitoring: Prometheus scraping exists, but dashboards and alerting are not present
 - Documentation: README covers basic setup, but not full local run, deployment, or architecture guidance
-- Release automation: CI exists, but release workflow is empty
+- Release automation: configured, but a tagged registry publication has not been verified
+- Phase 3: metric definitions exist, but agent/RAG call-path instrumentation is absent
+- Runtime correctness: API reads `final_state` instead of the graph's `final_report`
+- Evaluation: structured content extraction reads `item` instead of `text`; coverage is missing
+- Benefits analysis: recommendations are still static mock data
 
 ## Missing
 
@@ -31,9 +40,9 @@ The remaining work is mostly production-readiness, documentation, deployment, an
 
 ### Documentation
 
-- [ ] Document full local startup flow
-- [ ] Document required environment variables and provider options
-- [ ] Add API usage examples and Swagger/OpenAPI notes
+- [x] Document Dev Container and full local startup flow
+- [ ] Complete environment-variable and provider-option reference
+- [x] Add API usage examples and Swagger/OpenAPI notes
 - [ ] Add deployment guide
 - [ ] Add architecture overview
 
@@ -55,8 +64,8 @@ The remaining work is mostly production-readiness, documentation, deployment, an
 
 ### Release
 
-- [ ] Fill in release automation
-- [ ] Define a v1.0.0 release checklist
+- [x] Fill in release automation (tag publication awaits verification)
+- [x] Define a v1.0.0 release checklist in docs/releasing.md
 - [ ] Bump version when release scope is complete
 
 ## Existing Progress Notes
