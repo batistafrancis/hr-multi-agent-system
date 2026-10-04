@@ -68,6 +68,6 @@ The remaining work is mostly production-readiness, documentation, deployment, an
 - [x] Define a v1.0.0 release checklist in docs/releasing.md
 - [ ] Bump version when release scope is complete
 
-## Existing Progress Notes
+## Next-Step Roadmap
 
-- Historical roadmap: [.github/workflows/What_s next_(Post_PR_3).md](.github/workflows/What_s%20next_(Post_PR_3).md)
+- Ordered next steps: [.github/workflows/What_s next_(Post_PR_3).md](.github/workflows/What_s%20next_(Post_PR_3).md)

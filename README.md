@@ -16,23 +16,89 @@ Author: [Francis Batista](https://github.com/batistafrancis)
 
 ## Quick Start
 
-### Recommended: VS Code Dev Container
+### 1. Open the Dev Container on Windows
 
-Start Docker Desktop (Linux containers), install the VS Code Dev Containers extension,
-then run **Dev Containers: Reopen in Container**. The configuration in
-[.devcontainer](.devcontainer/devcontainer.json) supplies Python 3.11, development
-dependencies, and an Ollama sidecar; host Python is not required.
+1. Start Docker Desktop with its Linux engine enabled.
+2. Open `C:\projects-dev\hr-multi-agent-system` in VS Code.
+3. Install the **Dev Containers** extension if needed.
+4. Press **Ctrl+Shift+P** and select **Dev Containers: Reopen in Container**.
+5. Wait for dependency installation to finish, then open a new VS Code terminal.
 
-See the [development and release guide](docs/releasing.md) for validation commands,
-model setup, API startup, and image publishing.
+The terminal runs inside Linux with Python 3.11; no Windows Python installation
+is required. [devcontainer.json](.devcontainer/devcontainer.json) configures the
+workspace and [compose.yml](.devcontainer/compose.yml) starts an Ollama sidecar.
+Run all commands below in the Dev Container terminal, not Windows PowerShell.
 
-### 1. Setup Environment
+### 2. Verify the environment
 
 ```bash
-python -m venv venv
-source venv/bin/activate # or `venv\Scripts\activate` on Windows
-pip install -e .
+python --version
+python -m pytest tests -v
+curl --fail http://ollama:11434/api/tags
 ```
+
+Expect Python 3.11, passing offline tests, and an Ollama JSON response.
+An empty model list is normal before the first download. Tests mock providers;
+they do not prove live model or RAG availability.
+
+### 3. Download the local model
+
+```bash
+curl --fail http://ollama:11434/api/pull \
+  -d '{"name":"qwen3.5:4b","stream":false}'
+```
+
+This downloads model weights and can take several minutes. Ollama model data
+persists in a Docker volume.
+
+### 4. Configure local providers and seed sample data
+
+```bash
+export OLLAMA_BASE_URL=http://ollama:11434
+export OLLAMA_MODEL=qwen3.5:4b
+export USE_OLLAMA_EMBEDDINGS=true
+export CHROME_PERSIST_DIR=./data/benefits_db_ollama
+
+python -m scripts.seed_rag
+```
+
+This uses Ollama for generation and embeddings, avoiding the older
+sentence-transformer dependency stack. The separate database directory avoids
+mixing embedding models. `CHROME_PERSIST_DIR` is the current setting name,
+despite the spelling; `CHROMA_PERSIST_DIR` does not configure that field.
+Repeated seeding currently adds duplicate documents.
+
+No OpenAI or Tavily key is needed for this local demo. Without a Tavily key,
+research returns development mock results. Use only sample data for initial
+validation; external providers require approval before receiving HR data.
+This live configuration still needs end-to-end verification.
+
+### 5. Start the API
+
+Run in the same terminal so the exported settings remain active:
+
+```bash
+python -m uvicorn src.api.main:app \
+  --host 0.0.0.0 --port 8000 --reload
+```
+
+Keep the terminal running. VS Code forwards port 8000; open these URLs on Windows:
+
+- [Swagger API interface](http://localhost:8000/docs)
+- [Health endpoint](http://localhost:8000/health)
+- [Prometheus metrics](http://localhost:8000/metrics)
+
+In Swagger, execute `POST /generate-role` with a topic such as
+`AI Ethics Manager`. Alternatively, use the curl example below in a second
+Dev Container terminal. Generation can be slow on CPU. Press **Ctrl+C** in the
+server terminal to stop the API.
+
+Known limitation: the API reads the wrong report field, so `report` can be
+`null` even when the graph produces a report. `/health` checks process health,
+not model, search, or vector-store readiness.
+
+See the [development and release guide](docs/releasing.md) for additional
+validation commands, implementation reading notes, and image publishing.
 
 
 ## Test Retrieval
@@ -69,7 +135,8 @@ print(context)
 curl -X POST "http://localhost:8000/generate-role?topic=AI%20Ethics%20Manager"
 ```
 
-Response includes final report and role description.
+Response includes a role description. The final report field currently needs
+the correction described in the local startup notes above.
 
 
 ## Phase 3: Evaluation & Observability
@@ -97,6 +164,24 @@ Agent/RAG counters are defined but their call-path instrumentation remains pendi
 - Version tags trigger gated image publication to GitHub Container Registry.
 - Cloud deployment, dashboards/alerts, caching, and demo frontend remain pending.
 - See [PROGRESS.md](PROGRESS.md) and the [release checklist](docs/releasing.md#v100-checklist).
+
+## Recommended Next Steps
+
+1. Review the readiness implementation and verify live local seeding and generation.
+2. Fix the API report-field mismatch, provider-error handling, and evaluation
+   extraction; add regression tests.
+3. Wire agent/RAG counters into actual calls and verify request tracing.
+4. Replace static benefits recommendations with grounded analysis.
+5. Add Grafana dashboards and alerting, then measure performance before caching.
+6. Choose a deployment platform, verify persistence and rollback, and add a demo UI.
+
+Prioritize runtime correctness and completing Phase 3 observability before
+deployment. Follow the [progress checklist](PROGRESS.md) for remaining work.
+
+For understanding the code, start with the
+[implementation reading guide](docs/releasing.md#reading-this-implementation),
+then the [graph](src/core/graph.py), [role designer](src/agents/role_designer.py),
+and [API](src/api/main.py).
 
 ## Repository coding agent and skills
 

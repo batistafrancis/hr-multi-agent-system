@@ -33,7 +33,7 @@ class Settings(BaseSettings):
 
     # Ollama (local)
     ollama_base_url: str = "http://localhost:11434"  # default
-    ollama_model: str = "llama3.2:3b"  # or "mistral", "phi3", etc
+    ollama_model: str = "qwen3.5:4b"
 
     # Model names
     embedding_model: str = "sentence-transformers/all-MiniLM-L6-V2"  # or use Ollama embeddings

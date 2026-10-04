@@ -56,7 +56,7 @@ snapshot and is not used by CI. A curated lockfile remains follow-up work.
 For a live local demo, pull a model explicitly:
 
 ```bash
-curl --fail http://ollama:11434/api/pull -d '{"name":"llama3.2:3b","stream":false}'
+curl --fail http://ollama:11434/api/pull -d '{"name":"qwen3.5:4b","stream":false}'
 python scripts/seed_rag.py
 python -m uvicorn src.api.main:app --host 0.0.0.0 --port 8000
 ```
