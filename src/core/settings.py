@@ -29,7 +29,7 @@ class Settings(BaseSettings):
     langchain_api_key: Optional[str] = None
 
     # Vector DB
-    chrome_persist_dir: str = "./data/benefits_db"
+    chroma_persist_dir: str = "./data/benefits_db"
 
     # Ollama (local)
     ollama_base_url: str = "http://localhost:11434"  # default

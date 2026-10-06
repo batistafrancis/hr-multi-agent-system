@@ -16,7 +16,7 @@ class RAGRetriever:
     """Handles embedding storage and retrieval of HR documents."""
 
     def __init__(self, persist_dir: Optional[str] = None):
-        self.persist_dir = persist_dir or settings.chrome_persist_dir
+        self.persist_dir = persist_dir or settings.chroma_persist_dir
         self.embedding_function = self._get_embedding_function()
         self.vectorstore: Optional[Chroma] = None
         self._load_or_create()  # Try to load existing DB

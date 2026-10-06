@@ -57,15 +57,16 @@ persists in a Docker volume.
 export OLLAMA_BASE_URL=http://ollama:11434
 export OLLAMA_MODEL=qwen3.5:4b
 export USE_OLLAMA_EMBEDDINGS=true
-export CHROME_PERSIST_DIR=./data/benefits_db_ollama
+export CHROMA_PERSIST_DIR=./data/benefits_db_ollama
 
 python -m scripts.seed_rag
 ```
 
 This uses Ollama for generation and embeddings, avoiding the older
 sentence-transformer dependency stack. The separate database directory avoids
-mixing embedding models. `CHROME_PERSIST_DIR` is the current setting name,
-despite the spelling; `CHROMA_PERSIST_DIR` does not configure that field.
+mixing embedding models. `CHROMA_PERSIST_DIR` configures database persistence.
+Environment variables override `.env` entries.
+The default remains `./data/benefits_db`; existing data is not moved or deleted.
 Repeated seeding currently adds duplicate documents.
 
 No OpenAI or Tavily key is needed for this local demo. Without a Tavily key,
@@ -112,6 +113,9 @@ print(context)
 ```
 
 ## Project Structure
+
+- [Technical onboarding: architecture and local setup](docs/architecture-and-local-setup.md)
+  explains the layers, runtime agents, RAG flow, local startup, and known limitations.
 
 - `src/agents/` - Agent implementations
 - `src/tools/` - RAG, search, HRIS tools

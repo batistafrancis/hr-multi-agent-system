@@ -18,6 +18,8 @@ The remaining work is mostly production-readiness, documentation, deployment, an
 - Git skill enforcing 50-character subjects and 70-character body lines
 - Offline provider doubles for unit and graph integration tests
 - Tag-triggered, validation-gated GHCR image publishing configuration
+- Corrected CHROMA_PERSIST_DIR configuration,
+  updated local setup documentation, and offline persistence regression tests
 
 ## Partial
 
