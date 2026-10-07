@@ -186,6 +186,11 @@ You need:
 
 If you are already working inside the project's Dev Container, skip Step 1.
 
+Before rebuilding an existing container, follow the
+[local-state migration guide](devcontainer-persistence.md). Repository files
+are bind-mounted, while Copilot and VS Code remote data use dedicated Docker
+volumes. SSH private keys should remain on the host.
+
 ### Step 1: Open the development container
 
 Open the repository in VS Code, then run:
