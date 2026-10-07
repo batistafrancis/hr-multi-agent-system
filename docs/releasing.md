@@ -73,8 +73,8 @@ Provider selection currently uses embedding settings; it is not a separate LLM s
 
 ## CI
 
-The [CI workflow](../.github/workflows/ci.yml) runs on main/develop/feature branch
-pushes and pull requests targeting main. The release workflow also calls it directly:
+The [CI workflow](../.github/workflows/ci.yml) runs on pushes to `main`, `develop`, and
+`feat/**` branches, and on pull requests targeting `main`. The release workflow also calls it directly:
 
 1. Install CPU PyTorch and the project with development dependencies on Python 3.11.
 2. Run Ruff, Black, mypy, and the complete offline test suite.
