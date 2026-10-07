@@ -14,6 +14,7 @@ The remaining work is mostly production-readiness, documentation, deployment, an
 - Local Docker and docker-compose setup
 - CI workflow for lint, tests, and Docker build
 - Python 3.11 Dev Container with Ollama sidecar
+- Dev Container image creates vscode-owned state mount points before connection
 - Repository Copilot coding agent and four reusable development skills
 - Git skill enforcing 50-character subjects and 70-character body lines
 - Offline provider doubles for unit and graph integration tests
@@ -72,4 +73,6 @@ The remaining work is mostly production-readiness, documentation, deployment, an
 
 ## Next-Step Roadmap
 
+- [Six-phase implementation strategy](docs/implementation-strategy.md):
+  code backlog, dependencies, decisions, and acceptance criteria.
 - Ordered next steps: [.github/workflows/What_s next_(Post_PR_3).md](.github/workflows/What_s%20next_(Post_PR_3).md)

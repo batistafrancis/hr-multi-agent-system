@@ -29,6 +29,10 @@ is required. [devcontainer.json](.devcontainer/devcontainer.json) configures the
 workspace and [compose.yml](.devcontainer/compose.yml) starts an Ollama sidecar.
 Run all commands below in the Dev Container terminal, not Windows PowerShell.
 
+Before rebuilding an existing container, follow the
+[local-state migration guide](docs/devcontainer-persistence.md) to preserve
+Copilot/VS Code data and configure host SSH-agent forwarding.
+
 ### 2. Verify the environment
 
 ```bash
@@ -181,6 +185,8 @@ Agent/RAG counters are defined but their call-path instrumentation remains pendi
 
 Prioritize runtime correctness and completing Phase 3 observability before
 deployment. Follow the [progress checklist](PROGRESS.md) for remaining work.
+Use the [six-phase implementation strategy](docs/implementation-strategy.md)
+for the detailed code backlog, dependencies, and acceptance criteria.
 
 For understanding the code, start with the
 [implementation reading guide](docs/releasing.md#reading-this-implementation),
