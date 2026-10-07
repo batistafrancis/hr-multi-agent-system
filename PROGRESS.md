@@ -25,7 +25,7 @@ The remaining work is mostly production-readiness, documentation, deployment, an
 ## Partial
 
 - Monitoring: Prometheus scraping exists, but dashboards and alerting are not present
-- Documentation: README covers basic setup, but not full local run, deployment, or architecture guidance
+- Documentation: basic setup and full local startup are documented; deployment and architecture guidance remain incomplete
 - Release automation: configured, but a tagged registry publication has not been verified
 - Phase 3: metric definitions exist, but agent/RAG call-path instrumentation is absent
 - Runtime correctness: API reads `final_state` instead of the graph's `final_report`
