@@ -11,9 +11,6 @@ class BenefitsAnalystAgent(BaseAgent):
         current = ["401(k) matching", "Health insurance", "Paid time off"]
         recommended = ["Remote work stipend", "Mental health days", "Learning budget"]
 
-        result = {
-            "current_benefits_used": current,
-            "recommended_benefits": recommended
-        }
+        result = {"current_benefits_used": current, "recommended_benefits": recommended}
         self.log_end(result)
         return result

@@ -5,7 +5,6 @@ from src.agents.role_designer import RoleDesignerAgent
 from src.agents.benefits_analyst import BenefitsAnalystAgent
 from src.agents.report_compiler import ReportCompilerAgent
 
-
 researcher = ResearcherAgent("researcher")
 role_designer = RoleDesignerAgent("role_designer")
 benefits_analyst = BenefitsAnalystAgent("benefits_analyst")
@@ -13,16 +12,19 @@ report_compiler = ReportCompilerAgent("report_compiler")
 
 
 async def researcher_node(state: AgentState) -> dict:
-    return await researcher.run(state) # type: ignore
+    return await researcher.run(state)  # type: ignore
+
 
 async def role_designer_node(state: AgentState) -> dict:
-    return await role_designer.run(state) # type: ignore
+    return await role_designer.run(state)  # type: ignore
+
 
 async def benefits_analyst_node(state: AgentState) -> dict:
-    return await benefits_analyst.run(state) # type: ignore
+    return await benefits_analyst.run(state)  # type: ignore
+
 
 async def report_compiler_node(state: AgentState) -> dict:
-    return await report_compiler.run(state) #type: ignore
+    return await report_compiler.run(state)  # type: ignore
 
 
 workflow = StateGraph(AgentState)

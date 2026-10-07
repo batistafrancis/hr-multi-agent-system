@@ -21,7 +21,7 @@ class ResearcherAgent(BaseAgent):
         result = {
             "research_notes": trends,
             "competitor_roles": comp_roles,
-            "compensation_data": {"summary": compensation[0] if compensation else "N/A"}
+            "compensation_data": {"summary": compensation[0] if compensation else "N/A"},
         }
         self.log_end(result)
         return result

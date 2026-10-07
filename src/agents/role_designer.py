@@ -22,17 +22,18 @@ class RoleDesignerAgent(BaseAgent):
         if settings.use_ollama_embeddings or "sentence-transformers" in settings.embedding_model:
             ChatOllama = getattr(importlib.import_module("langchain_ollama"), "ChatOllama")
             llm = ChatOllama(
-                model=settings.ollama_model,
-                base_url=settings.ollama_base_url,
-                temperature=0.7
+                model=settings.ollama_model, base_url=settings.ollama_base_url, temperature=0.7
             )
         else:
             ChatOpenAI = getattr(importlib.import_module("langchain_openai"), "ChatOpenAI")
             llm = ChatOpenAI(model=settings.llm_model, temperature=0.7)
 
-        prompt = ChatPromptTemplate.from_messages([
-            ("system", "You are an expert HR role designer. Output a JSON object."),
-            ("user", f"""
+        prompt = ChatPromptTemplate.from_messages(
+            [
+                ("system", "You are an expert HR role designer. Output a JSON object."),
+                (
+                    "user",
+                    f"""
 Topic: {topic}
 Research: {research}
 Benefits available: {benefits_context}
@@ -45,13 +46,12 @@ Generate a job role with:
 - recommended_benefits (2-4 from the list above)
 
 Return valid JSON.
-""")
-        ])
+""",
+                ),
+            ]
+        )
         chain = prompt | llm
         response = await chain.ainvoke({})
 
         # Simple extraction (in production, use structured output)
-        return {
-            "drafted_role": {"raw": response.content},
-            "role_description": response.content
-        }
+        return {"drafted_role": {"raw": response.content}, "role_description": response.content}

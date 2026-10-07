@@ -11,24 +11,24 @@ RUN apt-get update && apt-get install -y \
 
 # Copy dependency files first (for better caching)
 COPY pyproject.toml ./
-COPY .env.example .env
-
-# Copy project definition
-COPY pyproject.toml .
+COPY src ./src
 
 # Install Python dependencies
 RUN pip install --no-cache-dir --upgrade pip setuptools wheel && \
-    pip install -e . && \
-    pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu
+    pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu && \
+    pip install --no-cache-dir .
 
-# Copy the rest of the application
-COPY . .
+COPY scripts ./scripts
+COPY data/sample_benefits.json ./data/sample_benefits.json
 
 # Create data directory for ChromaDB
-RUN mkdir -p /app/data/benefits_db
+RUN useradd --create-home app && \
+    mkdir -p /app/data/benefits_db && \
+    chown -R app:app /app
 
 # Set Python path
 ENV PYTHONPATH=/app
 
-# Run the seeding script during build (optional)
-# CMD ["python", "scripts/seed_rag.py"]
+USER app
+EXPOSE 8000
+CMD ["python", "-m", "uvicorn", "src.api.main:app", "--host", "0.0.0.0", "--port", "8000"]

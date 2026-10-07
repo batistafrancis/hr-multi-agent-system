@@ -20,7 +20,7 @@ services:
         condition: service_healthy
     environment:
       - OLLAMA_BASE_URL=http://ollama:11434
-      - OLLAMA_MODEL=${OLLAMA_MODEL:-llama3.2:3b}
+      - OLLAMA_MODEL=${OLLAMA_MODEL:-qwen3.5:4b}
       - USE_OLLAMA_EMBEDDINGS=${USE_OLLAMA_EMBEDDINGS:-false}
       - OPENAI_API_KEY=${OPENAI_API_KEY:-dummy_key_not_needed_for_local}
       - EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-v2
@@ -38,8 +38,8 @@ services:
       sh -c "
         echo 'Waiting for Ollama to be ready...' &&
         sleep 5 &&
-        echo 'Pulling ${OLLAMA_MODEL:-llama3.2:3b} model...' &&
-        curl -X POST http://ollama:11434/api/pull -d '{\"name\": \"${OLLAMA_MODEL:-llama3.2:3b}\"}' &&
+        echo 'Pulling ${OLLAMA_MODEL:-qwen3.5:4b} model...' &&
+        curl -X POST http://ollama:11434/api/pull -d '{\"name\": \"${OLLAMA_MODEL:-qwen3.5:4b}\"}' &&
         echo 'Model pull complete. Starting RAG seeding...' &&
         python scripts/seed_rag.py &&
         echo 'Starting API server...' &&

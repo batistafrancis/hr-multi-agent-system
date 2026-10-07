@@ -50,11 +50,13 @@ def main():
 
     for benefit in benefits:
         texts.append(benefit["text"])
-        metadatas.append({
-            "category": benefit["category"],
-            "region": benefit["region"],
-            "source": "sample_benefits"
-        })
+        metadatas.append(
+            {
+                "category": benefit["category"],
+                "region": benefit["region"],
+                "source": "sample_benefits",
+            }
+        )
 
     # Add to vector store
     retriever.add_texts(texts, metadatas)
@@ -63,7 +65,7 @@ def main():
     test_queries = [
         "What retirement benefits do we offer?",
         "Tell me about parental leave policy",
-        "What's the remote work stipend?"
+        "What's the remote work stipend?",
     ]
 
     logger.info("\n--- Testing Retrieval ---")

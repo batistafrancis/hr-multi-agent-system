@@ -1,7 +1,7 @@
 """RAG retriever for company benefits and HR documents."""
 
 from pathlib import Path
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Optional
 from langchain_chroma import Chroma
 from langchain_openai import OpenAIEmbeddings
 from langchain_core.documents import Document
@@ -16,37 +16,36 @@ class RAGRetriever:
     """Handles embedding storage and retrieval of HR documents."""
 
     def __init__(self, persist_dir: Optional[str] = None):
-        self.persist_dir = persist_dir or settings.chrome_persist_dir
+        self.persist_dir = persist_dir or settings.chroma_persist_dir
         self.embedding_function = self._get_embedding_function()
         self.vectorstore: Optional[Chroma] = None
-        self._load_or_create() # Try to load existing DB
-
+        self._load_or_create()  # Try to load existing DB
 
     def _get_embedding_function(self):
         """Return appropriate embedding model based on settings."""
         if settings.use_ollama_embeddings:
             from langchain_ollama import OllamaEmbeddings
-            return OllamaEmbeddings(
-                model=settings.ollama_model,
-                base_url=settings.ollama_base_url
-            )
+
+            return OllamaEmbeddings(model=settings.ollama_model, base_url=settings.ollama_base_url)
         elif "sentence-transformers" in settings.embedding_model:
             # If use explicitly wants local sentence-transformers (free, no API key)
             try:
                 from langchain_huggingface import HuggingFaceEmbeddings
+
                 return HuggingFaceEmbeddings(
                     model_name=settings.embedding_model,
-                    model_kwargs={'device': 'cpu'},
-                    encode_kwargs={'normalize_embeddings': True}
+                    model_kwargs={"device": "cpu"},
+                    encode_kwargs={"normalize_embeddings": True},
                 )
-            except ImportError as e:
+            except ImportError:
                 # Fallback to community version
                 from langchain_community.embeddings import HuggingFaceEmbeddings
+
                 logger.warning("Falling back to OpenAI embeddings")
                 return HuggingFaceEmbeddings(
                     model_name=settings.embedding_model,
-                    model_kwargs={'device': 'cpu'},
-                    encode_kwargs={'normalize_embeddings': True}
+                    model_kwargs={"device": "cpu"},
+                    encode_kwargs={"normalize_embeddings": True},
                 )
         else:
             # Use OpenAI embeddings
@@ -59,23 +58,23 @@ class RAGRetriever:
         if persist_path.exists() and any(persist_path.iterdir()):
             try:
                 self.vectorstore = Chroma(
-                    persist_directory=str(persist_path),
-                    embedding_function=self.embedding_function
+                    persist_directory=str(persist_path), embedding_function=self.embedding_function
                 )
 
                 if not self.vectorstore:
                     raise ValueError("Vector store not initialized")
 
                 count = self.vectorstore._collection.count()
-                logger.info(f"Loaded existing Chroma DB from {self.persist_dir} ({count} documents)")
+                logger.info(
+                    f"Loaded existing Chroma DB from {self.persist_dir} ({count} documents)"
+                )
                 return
             except Exception as e:
                 logger.warning(f"Failed to load DB: {e}. Creating new.")
 
         # Create new
         self.vectorstore = Chroma(
-            persist_directory=str(persist_path),
-            embedding_function=self.embedding_function
+            persist_directory=str(persist_path), embedding_function=self.embedding_function
         )
         logger.info(f"Created new Chroma DB at {self.persist_dir}")
 
@@ -98,7 +97,6 @@ class RAGRetriever:
             for text, meta in zip(texts, metadatas or [{}] * len(texts))
         ]
         self.add_documents(documents)
-
 
     def retrieve(self, query: str, k: int = 4) -> List[Document]:
         """Retrieve top-k relevant documents for a query."""

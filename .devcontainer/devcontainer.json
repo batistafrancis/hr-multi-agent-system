@@ -1,0 +1,24 @@
+{
+  "name": "HR Multi-Agent System (Python 3.11)",
+  "dockerComposeFile": "compose.yml",
+  "service": "dev",
+  "workspaceFolder": "/workspaces/hr-multi-agent-system",
+  "shutdownAction": "stopCompose",
+  "remoteUser": "vscode",
+  "forwardPorts": [8000, "ollama:11434"],
+  "postCreateCommand": "python -m pip install --user --upgrade pip && python -m pip install --user torch --index-url https://download.pytorch.org/whl/cpu && python -m pip install --user -e '.[dev]'",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "charliermarsh.ruff"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.testing.pytestEnabled": true,
+        "python.testing.pytestArgs": ["tests"]
+      }
+    }
+  }
+}
