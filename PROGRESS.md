@@ -37,7 +37,6 @@ The remaining work is mostly production-readiness, documentation, deployment, an
 - Cloud deployment configuration
 - Demo frontend
 - Performance tuning and caching
-- Release checklist for v1.0.0
 
 ## Remaining Checklist
 
