@@ -56,7 +56,7 @@ async def generate_role(topic: str):
         return {
             "status": "success",
             "topic": topic,
-            "report": final_state.get("final_state"),
+            "report": final_state.get("final_report"),
             "role_description": final_state.get("role_description"),
         }
     except Exception as e:
