@@ -10,13 +10,9 @@ description: Use when preparing commits, publishing branches, or rewriting appro
 - Keep the subject at most 50 characters, including any conventional prefix.
 - Use an imperative subject with a focused description of the change.
 - Separate the subject and body with one blank line.
-- Wrap every body line at at most 70 characters, including spaces and trailers.
+- Wrap every body line at at most 70 characters, including spaces.
 - Explain what changed and why; do not repeat the entire diff.
-- Include the required Copilot co-author trailer on its own line after a blank line:
-
-```text
-Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>
-```
+- Do not add a Copilot co-author signature or trailer to commits.
 
 Validate the exact message before committing, not a paraphrase. In PowerShell,
 store the complete proposed message in `$message`, then run:
